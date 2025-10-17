@@ -104,12 +104,20 @@ npm start
 
 Your app will run at:
 ```
-Frontend → http://localhost:3000
+Frontend → http://localhost:8081
 Backend  → http://localhost:3001
 ```
 
 ---
 
+## 🌐 Deployment
+
+- **Frontend:** Deployed on **Vercel** → [https://smart-recipe-generator-prabhav.vercel.app](https://smart-recipe-generator-prabhav.vercel.app)  
+- **Backend:** Deployed on **Render** → `https://<your-render-backend-url>`  
+
+> The frontend communicates with the backend via a public API URL. Make sure the backend URL is set in the environment variables (`VITE_BACKEND_URL`) both locally and on Vercel for production.
+
+---
 ## 🧑‍🍳 Usage
 
 1. Open the application in your browser.  
@@ -163,12 +171,6 @@ To contribute:
 
 ---
 
-## 🧾 License
-
-This project is licensed under the **MIT License**.  
-Feel free to modify and distribute the code with attribution.
-
----
 
 ## 📬 Contact
 
