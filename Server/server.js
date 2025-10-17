@@ -21,7 +21,7 @@ const GROQ_MODEL = "llama-3.1-8b-instant";
 // --- CORS CONFIGURATION FOR STREAMING ---
 // This is the standard and correct way to handle this.
 const corsOptions = {
-  origin: ["http://localhost:8081", "https://recipe-gen.vercel.app"], // Your React app's address
+  origin: ["http://localhost:8081", "https://smart-recipe-generator-prabhav.vercel.app"], // Your React app's address
   methods: "GET,POST",
   credentials: true, // Allows cookies or session info if you ever need it
 };
@@ -86,6 +86,10 @@ app.get("/recipeStream", async (req, res) => {
     console.log("Client disconnected");
     res.end();
   });
+});
+
+app.get("/", (req, res) => {
+  res.send("Smart Recipe Generator backend is running ✅");
 });
 
 app.listen(PORT, () => {
