@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
+import {RecipeGenerator} from "@/components/RecipeGenerator"; // <-- import new component
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -15,8 +17,17 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          {/* Main page */}
+          <Route
+            path="/"
+            element={
+              <>
+                <Index />
+                <RecipeGenerator /> {/* <-- Added RecipeGenerator here */}
+              </>
+            }
+          />
+          {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
