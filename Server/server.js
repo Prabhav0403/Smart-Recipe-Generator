@@ -1,46 +1,44 @@
-// server/server.js
-
 import express from "express";
-import cors from "cors"; // Re-importing the cors library
+import cors from "cors";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // --- GROQ CONFIGURATION ---
 const groq = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
   apiKey: process.env.GROQ_API_KEY,
 });
-
 const GROQ_MODEL = "llama-3.1-8b-instant";
 
-// --- CORS CONFIGURATION FOR STREAMING ---
-// This is the standard and correct way to handle this.
+// --- CORS CONFIGURATION ---
 const corsOptions = {
-  origin: ["http://localhost:8081", "https://smart-recipe-generator-prabhav.vercel.app"], // Your React app's address
-  methods: "GET,POST",
-  credentials: true, // Allows cookies or session info if you ever need it
+  origin: [
+    "http://localhost:5173", // local dev
+    "https://smart-recipe-generator-prabhav.vercel.app" // Vercel frontend
+  ],
+  methods: ["GET", "POST"],
+  credentials: true,
 };
 app.use(cors(corsOptions));
-// This handles the "preflight" request for more complex requests
-//app.options("*", cors(corsOptions)); 
-
 app.use(express.json());
 
+// --- HEALTH CHECK ROUTE ---
+app.get("/", (req, res) => res.send("Backend is running ✅"));
+
+// --- RECIPE STREAM ROUTE ---
 app.get("/recipeStream", async (req, res) => {
   try {
     const { ingredients, mealType, cuisine, cookingTime, complexity } = req.query;
-    console.log("Received query for Groq:", req.query);
 
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
-    // Explicitly flush headers to the client
-    res.flushHeaders(); 
+    res.flushHeaders();
 
     const sendEvent = (data) => {
       res.write(`data: ${JSON.stringify(data)}\n\n`);
@@ -63,10 +61,6 @@ app.get("/recipeStream", async (req, res) => {
       messages: [{ role: "user", content: prompt }],
       stream: true,
     });
-    
-    if (!stream) {
-      throw new Error("Failed to create a stream from the API.");
-    }
 
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content || "";
@@ -77,7 +71,7 @@ app.get("/recipeStream", async (req, res) => {
 
   } catch (err) {
     console.error("Error in /recipeStream route:", err);
-    res.write(`data: ${JSON.stringify({ action: "error", message: "Failed to generate recipe from Groq." })}\n\n`);
+    res.write(`data: ${JSON.stringify({ action: "error", message: "Failed to generate recipe." })}\n\n`);
   } finally {
     res.end();
   }
@@ -86,10 +80,6 @@ app.get("/recipeStream", async (req, res) => {
     console.log("Client disconnected");
     res.end();
   });
-});
-
-app.get("/", (req, res) => {
-  res.send("Smart Recipe Generator backend is running ✅");
 });
 
 app.listen(PORT, () => {
