@@ -18,7 +18,7 @@ const GROQ_MODEL = "llama-3.1-8b-instant";
 // --- CORS CONFIGURATION ---
 const corsOptions = {
   origin: [
-    "http://localhost:5173", // local dev
+    "http://localhost:8081", // local dev
     "https://smart-recipe-generator-prabhav.vercel.app" // Vercel frontend
   ],
   methods: ["GET", "POST"],
