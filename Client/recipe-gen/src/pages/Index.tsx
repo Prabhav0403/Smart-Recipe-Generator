@@ -34,8 +34,7 @@ const Index = () => {
       dietaryRestrictions: formData.dietaryRestrictions,
     }).toString();
 
-    const url = `http://localhost:3001/recipeStream?${queryParams}`;
-
+const url = `https://intertarsal-nelly-nonprobably.ngrok-free.dev/recipeStream?${queryParams}`;    
     // Initialize the Server-Sent Events connection
     const eventSource = new EventSource(url);
     eventSourceRef.current = eventSource;
