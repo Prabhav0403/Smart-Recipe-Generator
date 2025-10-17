@@ -21,7 +21,7 @@ const GROQ_MODEL = "llama-3.1-8b-instant";
 // --- CORS CONFIGURATION FOR STREAMING ---
 // This is the standard and correct way to handle this.
 const corsOptions = {
-  origin: "http://localhost:8081", // Your React app's address
+  origin: ["http://localhost:8081", "https://recipe-gen.vercel.app"], // Your React app's address
   methods: "GET,POST",
   credentials: true, // Allows cookies or session info if you ever need it
 };
